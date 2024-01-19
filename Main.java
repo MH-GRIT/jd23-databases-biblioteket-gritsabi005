@@ -1148,144 +1148,396 @@ class LibraryDatabase extends javax.swing.JFrame {
 
 /*
 
-Database
 
------------------------------------
+    Initial code without GUI
 
 
-show databases;
+    --------------------------------------------------------
 
-create database inlamningsuppgift;
-
-use inlamningsuppgift;
-
-show tables;
-
-Create table if not exists allLibraryCatalogue
-(
-id bigint primary key auto_increment not null,
-title varchar (255) not null unique,
-mediaType varchar (100) not null,
-author varchar (255) not null,
-stocks bigint null,
-maxDaysOfRent int
-);
-
-create table if not exists USERS
-(
-id bigint primary key auto_increment not null,
-name varchar (255) not null,
-email varchar (255) not null unique,
-password varchar (255) null);
-
-create table if not exists Log(
-id int primary key auto_increment,
-activityDate TIMESTAMP not null default CURRENT_TIMESTAMP,
-usersId int null,
-message text);
-
-create table if not exists usersRent
-(
-id bigint auto_increment not null,
-usersId bigint null,
-name varchar(255),
-allLibraryCatalogueId bigint null,
-title varchar(255),
-mediaType varchar(100),
-dateBorrowed date default current_date,
-dateToBeReturned date default current_date,
-primary key (id),
-foreign key (usersId) references users(id),
-foreign key (allLibraryCatalogueId) references allLibraryCatalogue(id)
-);
-
-INSERT INTO allLibraryCatalogue
-    (title, mediaType, author, stocks, maxDaysOfRent)
-VALUES
-    ("The Gifts of Imperfection", "Book", "Brené Brown", 10, 30),
-    ("You Are a Badass", "Book", "Jen Sincero", 10, 30),
-    ("The Power of Now", "Book", "Eckhart Tolle", 10, 30),
-    ("Love Yourself Like Your Life Depends on It", "Book", "Kamal Ravikant", 4, 30),
-    ("Radical Self-Love", "Book", "Gala Darling", 4, 30),
-    ("Little Fires Everywhere", "Book", "Celeste Ng", 2, 30),
-    ("Gone Girl", "Book", "Gillian Flynn", 3, 30),
-    ("Big Little Lies", "Book", "Liane Moriarty", 3, 30),
-    ("The Girl on the Train", "Book", "Paula Hawkins", 3, 30),
-    ("The Great Gatsby", "Book", "F. Scott Fitzgerald", 3, 30),
-    ("The Audacity of Hope", "Book", "Barack Obama", 2, 30),
-    ("1984", "Book", "George Orwell", 2, 30),
-    ("The Road to Wigan Pier", "Book", "George Orwell", 2, 30),
-    ("The Federalist Papers", "Book", "Alexander Hamilton, James Madison, John Jay", 2, 30),
-    ("The Prince", "Book", "Niccolò Machiavelli", 2, 30),
-    ("Meditations", "Book", "Marcus Aurelius", 1, 30),
-    ("Sophie's World", "Book", "Jostein Gaarder", 2, 30),
-    ("Being and Time", "Book", "Martin Heidegger", 1, 30),
-    ("Thus Spoke Zarathustra", "Book", "Friedrich Nietzsche", 1, 30),
-    ("The Republic", "Book", "Plato", 4, 30),
-    ("Inception", "DVD", "Christopher Nolan", 5, 10),
-    ("The Shawshank Redemption", "DVD", "Frank Darabont", 5, 10),
-    ("The Dark Knight", "DVD", "Christopher Nolan", 5, 10),
-    ("The Godfather", "DVD", "Francis Ford Coppola", 5, 10),
-    ("Titanic", "DVD", "James Cameron", 5, 10),
-    ("Becoming", "Audio Book", "Michelle Obama", 5, 10),
-    ("The Hitchhiker's Guide to the Galaxy", "Audio Book", "Douglas Adams", 5, 10),
-    ("Educated", "Audio Book", "Tara Westover", 5, 10),
-    ("The Girl with the Dragon Tattoo", "Audio Book", "Stieg Larsson", 5, 10),
-    ("Sapiens: A Brief History of Humankind", "Audio Book", "Yuval Noah Harari", 5, 10),
-    ("The Legend of Zelda: Breath of the Wild", "Video Game", "Nintendo", 5, 10),
-    ("Red Dead Redemption 2", "Video Game", "Rockstar Games", 5, 10),
-    ("Fortnite", "Video Game", "Epic Games", 5, 10),
-    ("Minecraft", "Video Game", "Mojang", 5, 10),
-    ("FIFA 22", "Video Game", "EA Sports", 5, 10);
-
-update allLibraryCatalogue set stocks = 2 where title = "Gone girl";
-insert into Users (name, email, password) VALUES
-("Greg", "greg.heffley@gritacademy.se", "12345678"),
-("Mariam", "mariam.svensson@gritacademy.se", "12345678"),
-("Nobita", "nobi.nobita@gritacademy.se", "12345678"),
-("Josh", "joshua.farris@gritacademy.se", "12345678");
-
-insert into Users (name, email, password) VALUES
-("Suneo", "suneo.takahashi@gritacademy.se", "12345678");
+    import java.sql.Connection;
+    import java.sql.*;
+    import java.util.Scanner;
 
 
 
--- logInpage
 
-select name, password from users;
-
--- Look after the book from the title or author, allLibraryCatalogue
-
-select id, title, mediaType, author, stocks from allLibraryCatalogue where title like "%19%" or author like "%19";
-
--- borrowing the book
--- if its book, then user has 30 days rent
+public class Main {
+   public static void main(String[] args) {
 
 
-insert into usersRent
-(usersId, name, allLibraryCatalogueId, title, mediaType, dateBorrowed, dateToBeReturned)
-select
-u.id, u.name, a.id, a.title, a.mediaType, current_date, date_add(Current_date, interval 30 day)
-from users u join allLibraryCatalogue a on u.id = 1 and a.id = 19;
+       //demoFromTheLessons();
 
--- if mediaType != "book", insert into (dateReminder 10 days) // CHANGE THE INTERVAL
 
-insert into usersRent
-(usersId, name, allLibraryCatalogueId, title, mediaType, dateBorrowed, dateToBeReturned)
-select
-u.id, u.name, a.id, a.title, a.mediaType, current_date, date_add(Current_date, interval 10 day)
-from users u join allLibraryCatalogue a on u.id = 1 and a.id = 29;
+       //pokemonExcercise();
 
--- if stocks is == 0 --
--- Sorry the item is currently rent out, please come back again.
 
--- user can change their profile
--- for name
-UPDATE users SET name = "Josh" where name = "Brian";
--- for password
-UPDATE users SET password = "newPassword394" where name = "Brian";
---for email
-UPDATE email set email = "brian.mccanon@gritacademy.se" where name = "Brian";
+       runLibraryProgram();
 
-*/
+
+   }
+
+
+   private static void runLibraryProgram(){
+       Database.username = "root";
+       Database.password = "Password3\"";
+       Database.port = 3306;
+       Database.database = "inlamningsuppgift";
+
+
+       Connection connection = Database.getConnection();
+       if (connection == null) {
+           System.out.println("Kund inte ansluta till databasen");
+           System.exit(-1);
+           return;
+       }
+
+
+       Scanner scanner = new Scanner(System.in);
+       String input = "";
+
+
+       // maybe you can use this for creating the menu
+       do {
+           System.out.println("1. Log in");
+           input = scanner.nextLine();
+           switch (input) {
+               case "1":
+                   logIn(connection, scanner);
+                   break;
+           }
+       } while(!input.equals("99"));
+
+
+       try {
+           connection.close();
+       } catch (SQLException ex) {
+           Database.PrintSQLException(ex);
+       }
+
+
+   }
+
+
+   private static void logIn(Connection conn, Scanner scanner) {
+       System.out.print("Write your name: ");
+       String name = scanner.nextLine();
+       System.out.print("Write down your password: ");
+       String password = scanner.nextLine();
+
+
+       String sql = "select * from users where name = '" + name + "' and password = '" + password + "'";
+       try {
+
+
+           Statement statement = conn.createStatement();
+           ResultSet resultFromLogInProfile = statement.executeQuery(sql); // you use the resultset to show to the user
+           // BUT THE ONLY working function is
+           // statement.executeQuery(sql);
+           if(resultFromLogInProfile.next()) {
+               System.out.println("You are logged in!");
+               int usersId = resultFromLogInProfile.getInt("id");
+               String userName = resultFromLogInProfile.getString("name");
+               log(conn, String.valueOf(usersId),name + " logs in");
+               searchCatalogues(conn, scanner, usersId, userName);
+               seeYourCataloguesAndReturnIt(conn, scanner, usersId, userName);
+               editProfile(conn, scanner, usersId, userName);
+               activities(conn, scanner, usersId, userName);
+           } else {
+               System.out.println("Wrong username and password combination, try again");
+           }
+
+
+       } catch(SQLException ex) {
+           Database.PrintSQLException(ex);
+       }
+   }
+
+
+   private static void searchCatalogues(Connection conn, Scanner scanner, int usersId, String userName) {
+       System.out.print("Search by Title or Author: ");
+       String searchWord = scanner.nextLine();
+
+
+       String sql = "SELECT id, title, mediaType, author, stocks, maxDaysOfRent " +
+               "FROM allLibraryCatalogue WHERE title LIKE '%" + searchWord + "%' OR author LIKE '%" + searchWord + "%'";
+
+
+       try {
+           Statement statement = conn.createStatement();
+           ResultSet resultSet = statement.executeQuery(sql);
+           if (resultSet.next()) {
+               System.out.println("We have it in our catalogue");
+               System.out.println("What you searched is a/an " +
+                       resultSet.getString("mediaType") + " with title '"
+                       + resultSet.getString("title") + "' by "
+                       + resultSet.getString("author") + ". We currently have "
+                       + resultSet.getString("stocks") + " of these in our catalogue."
+                       + " If you wish to borrow this, you will have " + resultSet.getInt("maxDaysOfRent")
+                       + " days to borrow.");
+               log(conn, String.valueOf(usersId), userName + " is searching " + searchWord);
+               borrow(conn, scanner, resultSet, usersId, userName);
+           } else {
+               System.out.println("We do not currently have it in our catalogue!");
+           }
+
+
+       } catch (SQLException ex) {
+           Database.PrintSQLException(ex);
+       }
+   }
+
+
+   private static void borrow(Connection conn, Scanner scanner, ResultSet resultFromSearchCatalogue, int usersId,
+                              String userName)
+           throws SQLException {
+       System.out.println("Do you want to borrow this? Answer with 'Yes' or 'No'");
+       String answer = scanner.nextLine();
+       String sqlCommandToCheckIfItsAlreadyBorrowed = "select name, title from usersRent where name = '"
+               + userName + "' and title = '" + resultFromSearchCatalogue.getString("title") + "'";
+       if (answer.equals("Yes")) {
+           Statement stats = conn.createStatement(); // checking if it's already borrowed
+           ResultSet rsChecksIfItsAlreadyBorrowed = stats.executeQuery(sqlCommandToCheckIfItsAlreadyBorrowed);
+           if (!rsChecksIfItsAlreadyBorrowed.next()) {
+               int checkingTheStocks = resultFromSearchCatalogue.getInt("stocks");
+               if (checkingTheStocks >= 0){
+                   if (resultFromSearchCatalogue.getString("mediaType").equals("Book")) {
+                       String sqlCommandForCreatinguserRentTable =
+                               "insert into usersRent (usersId, name, allLibraryCatalogueId, title, mediaType, " +
+                                       "dateBorrowed, dateToBeReturned) select u.id, u.name, a.id, " +
+                                       "a.title, a.mediaType, current_date, date_add(Current_date, interval 30 day) " +
+                                       "from users u join allLibraryCatalogue a on u.id = " + usersId +
+                                       " and a.id = " + resultFromSearchCatalogue.getInt("id");
+                       System.out.println(sqlCommandForCreatinguserRentTable);
+                       try {
+                           Statement statement = conn.createStatement();
+                           int resultFromBorrowing = statement.executeUpdate(sqlCommandForCreatinguserRentTable);
+                           String sqlCommandForGettingTheDatesToBeReturned = "select dateToBeReturned from usersRent where title " +
+                                   "= '" + resultFromSearchCatalogue.getString("title") +
+                                   "' and name = '" + userName + "'";
+                           try {
+                               Statement statementTwo = conn.createStatement();
+                               ResultSet rsDateToBeReturned = statementTwo.executeQuery(sqlCommandForGettingTheDatesToBeReturned);
+                               if (rsDateToBeReturned.next()) {
+                                   Date dateToReturn = rsDateToBeReturned.getDate("dateToBeReturned");
+                                   System.out.println("You are borrowing " + resultFromSearchCatalogue.getString
+                                           ("title") + ", and you have " + resultFromSearchCatalogue.getInt
+                                           ("maxDaysOfRent") + " days until you have to return it (" +
+                                           dateToReturn + "). " +
+                                           "To see all your due dates catalogues, click on your profile. " +
+                                           "Enjoy our catalogue and be sure to come back!");
+                                   String sqlUpdateStocks = "update allLibraryCatalogue set stocks = stocks - 1 where title = '"
+                                           + resultFromSearchCatalogue.getString("title") + "'";
+                                   try {
+                                       stats.executeUpdate(sqlUpdateStocks);
+                                   } catch (SQLException ex) {
+                                       Database.PrintSQLException(ex);
+                                   }
+                                   log(conn, String.valueOf(usersId), userName + " is borrowing "
+                                           + resultFromSearchCatalogue.getString("title"));
+                               }
+                           } catch (SQLException ex) {
+                               Database.PrintSQLException(ex);
+                           }
+                       } catch (SQLException ex) {
+                           Database.PrintSQLException(ex);
+                       }
+                   } else {
+                       String sqlCommandForCreatinguserRentTable =
+                               "insert into usersRent (usersId, name, allLibraryCatalogueId, title, mediaType, " +
+                                       "dateBorrowed, dateToBeReturned) select u.id, u.name, a.id, " +
+                                       "a.title, a.mediaType, current_date, date_add(Current_date, interval 10 day) " +
+                                       "from users u join allLibraryCatalogue a on u.id = " + usersId +
+                                       " and a.id = " + resultFromSearchCatalogue.getInt("id");
+                       System.out.println(sqlCommandForCreatinguserRentTable);
+                       try {
+                           Statement statement = conn.createStatement();
+                           statement.executeUpdate(sqlCommandForCreatinguserRentTable);
+                           String sqlCommandForGettingTheDatesToBeReturned = "select dateToBeReturned from usersRent where title " +
+                                   "= '" + resultFromSearchCatalogue.getString("title") +
+                                   "' and name = '" + userName + "'";
+                           try {
+                               Statement statementTwo = conn.createStatement();
+                               ResultSet rsDateToBeReturned = statementTwo.executeQuery(sqlCommandForGettingTheDatesToBeReturned);
+                               if (rsDateToBeReturned.next()) {
+                                   Date dateToReturn = rsDateToBeReturned.getDate("dateToBeReturned");
+                                   System.out.println("You are borrowing " + resultFromSearchCatalogue.getString
+                                           ("title") + ", and you have " + resultFromSearchCatalogue.getInt
+                                           ("maxDaysOfRent") + " days until you have to return it (" +
+                                           dateToReturn + "). " +
+                                           "To see all your due dates catalogues, click on your profile. " +
+                                           "Enjoy our catalogue and be sure to come back!");
+                                   String sqlUpdateStocks = "update allLibraryCatalogue set stocks = stocks - 1 where title = '"
+                                           + resultFromSearchCatalogue.getString("title") + "'";
+                                   try {
+                                       stats.executeUpdate(sqlUpdateStocks);
+                                   } catch (SQLException ex) {
+                                       Database.PrintSQLException(ex);
+                                   }
+                                   log(conn, String.valueOf(usersId), userName + " borrows "
+                                           + resultFromSearchCatalogue.getString("title"));
+                               }
+                           } catch (SQLException ex) {
+                               Database.PrintSQLException(ex);
+                           }
+                       } catch (SQLException ex) {
+                           Database.PrintSQLException(ex);
+                       }
+                   }
+               } else {
+                   System.out.println("Please come back again, the item is out of stocks");
+               }
+
+
+           } else {
+               System.out.println("Oops! It looks like you are already borrowing this item. You may borrow it again once the " +
+                       "item is returned! To see all your due dates catalogues, " +
+                       "click on your profile. " +
+                       "Enjoy our catalogue and be sure to come back!");
+           }
+       }
+   }
+
+
+   private static void seeYourCataloguesAndReturnIt(Connection conn, Scanner scanner, int usersId, String userName) {
+
+
+       String sql = "select * from usersRent where name = '" + userName + "'";
+
+
+       try {
+           Statement statement = conn.createStatement();
+           ResultSet rsSeeingUserCatalogue = statement.executeQuery(sql);
+
+
+           if (rsSeeingUserCatalogue.next()) {
+               System.out.println("Here are the things that you have borrowed. " +
+                       "Be sure to return them before the due dates to avoid fines.");
+               int count = 0;
+               do {
+                   System.out.println((count + 1) + ". Title: '" + rsSeeingUserCatalogue.getString("title") +
+                           "'. Media Type: " + rsSeeingUserCatalogue.getString("mediaType") +
+                           ". Date to be returned: " + rsSeeingUserCatalogue.getDate("dateToBeReturned"));
+                   System.out.println();
+                   count++;
+               } while (rsSeeingUserCatalogue.next());
+               log(conn, String.valueOf(usersId), userName + " is checking profile catalogues");
+               System.out.println("Do you want to return a catalogue early? " +
+                       "If you do, directly copy the title of the catalogue you want to return." +
+                       " Ps. Only one item return per login.");
+
+
+               String titleOfTheCatalogueToReturn = scanner.nextLine();
+
+
+               String sqlCommandToReturnTheCatalogue = "DELETE FROM usersRent WHERE name = '" + userName +
+                       "' AND title = '" + titleOfTheCatalogueToReturn + "'";
+               try {
+                   statement = conn.createStatement();
+                   int rsReturn = statement.executeUpdate(sqlCommandToReturnTheCatalogue);
+                   if (rsReturn > 0) {
+                       System.out.println(titleOfTheCatalogueToReturn + " is now returned! " +
+                               "Thank you and welcome back.");
+                       log(conn, String.valueOf(usersId), userName + " returns " + titleOfTheCatalogueToReturn);
+                       String updateStocksSql = "update allLibraryCatalogue SET stocks = stocks + 1 where title = '"
+                               + titleOfTheCatalogueToReturn + "'";
+                       try {
+                           statement.executeUpdate(updateStocksSql);
+                       } catch (SQLException ex) {
+                           Database.PrintSQLException(ex);
+                       }
+                   }
+               } catch (SQLException ex) {
+                   Database.PrintSQLException(ex);
+               }
+
+
+           } else {
+               System.out.println("You do not have anything to return!");
+           }
+       } catch (SQLException ex) {
+           Database.PrintSQLException(ex);
+       }
+   }
+   private static void editProfile(Connection conn, Scanner scanner, int usersId, String userName) {
+       System.out.println("Welcome to editing page! Here you can edit your name, your password and your email. " +
+               "Write your new name, password and email adress.");
+       System.out.println("New name: ");
+       String newName = scanner.nextLine();
+       System.out.println("New password: ");
+       String newPassword = scanner.nextLine();
+       System.out.println("New email: ");
+       String newEmail = scanner.nextLine();
+
+
+       String sql = "update users set name = '" + newName + "', password = '" + newPassword + "', email = '"
+               + newEmail + "' where id = " + usersId;
+
+
+       try {
+           Statement statement = conn.createStatement();
+           int resultSet = statement.executeUpdate(sql);
+
+
+           if (resultSet > 0) {
+               System.out.println("New set of name, password and email adress have been successfully updated.");
+               log(conn, String.valueOf(usersId), userName + " has changed the user profile setting");
+           } else {
+               System.out.println("The profile update changes could not be completed. Try again!");
+           }
+
+
+       } catch (SQLException ex) {
+           Database.PrintSQLException(ex);
+       }
+   }
+   private static void activities(Connection conn, Scanner scanner, int usersId, String userName) {
+       System.out.println("History:");
+       String sqlCommandToTakeTheHistoryLog = "select activityDate, message from log where usersId = " + usersId;
+
+
+       try {
+           Statement statement = conn.createStatement();
+           ResultSet rsHistoryLog = statement.executeQuery(sqlCommandToTakeTheHistoryLog);
+
+
+           if (rsHistoryLog.next()) {
+               int count = 0;
+               do {
+                   System.out.println((count +1) + ". " + rsHistoryLog.getTimestamp("activityDate") +  ", " + rsHistoryLog.getString("message") + ".");
+                   count++;
+               } while (rsHistoryLog.next());
+               log(conn, String.valueOf(usersId), userName + " is looking at activity history.");
+           } else {
+               System.out.println("You do not have activity history to show.");
+           }
+       } catch (SQLException ex) {
+           Database.PrintSQLException(ex);
+       }
+   }
+
+
+   private static void log(Connection conn, String userId, String message) {
+       try {
+
+
+           String user = (userId == null || userId.isEmpty()) ? "NULL" : userId;
+           Statement statement = conn.createStatement();
+           String sql = "INSERT INTO Log SET usersId = " + user + ", message = '" + message + "'";
+           //System.out.println(sql);
+           statement.executeUpdate(sql);
+       } catch(SQLException ex) {
+           Database.PrintSQLException(ex);
+       }
+   }
+
+
+
+}
+
+
+}
+
+
+        */
+
 }
