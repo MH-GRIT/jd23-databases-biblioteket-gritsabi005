@@ -18,5 +18,5 @@ If you would like to try to run the program without the GUI, you may also do so 
 sections at the bottom of the Main.java page with title Initial Code without GUI.
 
 Ps.
-Please also ensure to change the username, port, and password to the database using your own setting.
+Please also ensure to change the username, port, and password in the program using your own setting.
 You can change this inside the Main.java class under the method called initializeDatabaseConnection.
