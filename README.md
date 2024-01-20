@@ -16,3 +16,7 @@ Table Plus to run all of the sql commands, which you may download here https://t
 
 If you would like to try to run the program without the GUI, you may also do so by using the code 
 sections at the bottom of the Main.java page with title Initial Code without GUI.
+
+Ps.
+Please also ensure to change the username, port, and password to the database using your own setting.
+You can change this inside the Main.java class under the method called initializeDatabaseConnection.
